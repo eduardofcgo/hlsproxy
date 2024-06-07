@@ -1,0 +1,21 @@
+---
+version: "3.3"
+services:
+  hlsproxy:
+    build: hlsproxy
+    container_name: hlsproxy
+    volumes:
+      - ./hlsproxy/data:/data
+      - ./hlsproxy/scripts:/scripts
+    working_dir: /scripts
+    entrypoint: sh
+    depends_on:
+      - hlsserver
+  hlsserver:
+    image: nginx:1.19.7-alpine
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./hlsserver/nginx.conf:/etc/nginx/nginx.conf
+      - ./hlsproxy/data:/data
+      - ./hlsserver/html:/html
